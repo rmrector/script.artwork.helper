@@ -1,0 +1,3 @@
+v0.0.1~dev
+- And begin.
+- Plugin paths to gather images into a list for multiimage or lists.
