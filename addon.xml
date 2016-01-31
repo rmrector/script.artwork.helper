@@ -9,10 +9,10 @@
 		<summary lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork.</summary>
 		<description lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork. See README.md for detailed usage.</description>
 		<disclaimer lang="en">Artwork Skin Helper does not directly add functionality on its own and must be supported by skins or other add-ons.</disclaimer>
+		<source>https://github.com/rmrector/script.artwork.helper</source>
+		<forum>http://forum.kodi.tv/showthread.php?tid=236649</forum>
 		<license>The MIT License</license>
 		<platform>all</platform>
-		<source></source>
-		<forum></forum>
 		<language />
 		<website />
 		<email />
