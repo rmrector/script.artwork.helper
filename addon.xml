@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.artwork.skinhelper" name="Artwork Skin Helper" version="0.0.1~dev" provider-name="rrector">
+<addon id="script.artwork.helper" name="Artwork Helper" version="0.0.1~dev" provider-name="rrector">
 	<requires>
 		<import addon="xbmc.python" version="2.24.0" />
 		<import addon="xbmc.json" version="6.32.1" />
@@ -7,8 +7,8 @@
 	</requires>
 	<extension point="xbmc.python.library" library="default.py" />
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Artwork Skin Helper provides useful tools to skins and other add-ons for working with artwork.</summary>
-		<description lang="en">Artwork Skin Helper provides useful tools to skins and other add-ons for working with artwork. See the readme for detailed usage.</description>
+		<summary lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork.</summary>
+		<description lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork. See README.md for detailed usage.</description>
 		<disclaimer lang="en">Artwork Skin Helper does not directly add functionality on its own and must be supported by skins or other add-ons.</disclaimer>
 		<license>The MIT License</license>
 		<platform>all</platform>

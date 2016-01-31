@@ -1,6 +1,6 @@
-# Artwork Skin Helper
+# Artwork Helper
 
-Artwork Skin Helper provides useful tools to skins and other add-ons for working with artwork.
+Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork.
 
 ## ListItem multi image plugin path
 The simplest form grabs multiple images for the currently focused ListItem, suitable to populate a `multiimage` or list control.

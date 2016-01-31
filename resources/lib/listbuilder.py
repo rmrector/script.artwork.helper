@@ -27,7 +27,7 @@ def stitch_multiimage(path):
 
 def get_listitem_multiimage(path):
     """Stitch together all fanart for the selected ListItem:
-    plugin://script.artwork.skinhelper/multiimage/listitem/?refresh=$INFO[ListItem.DBID]&amp;&amp;containerid=4250&amp;&amp;arttype=tvshow.fanart&amp;&amp;shuffle=true
+    plugin://script.artwork.helper/multiimage/listitem/?refresh=$INFO[ListItem.DBID]&amp;&amp;containerid=4250&amp;&amp;arttype=tvshow.fanart&amp;&amp;shuffle=true
 
     'refresh' is just to get Kodi to fire off the plugin again, just set it to something that will change when the fanart should change
     'containerid' is optional, and points to an alternate container
