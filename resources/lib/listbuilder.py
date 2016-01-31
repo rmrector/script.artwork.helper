@@ -1,4 +1,3 @@
-import copy
 import random
 import sys
 import urllib
@@ -58,7 +57,7 @@ def get_listitem_multiimage(path):
             lastempty = True
 
     if 'shuffle' in path['query']:
-        resultcopy = copy.copy(result)
+        resultcopy = list(result)
         random.shuffle(resultcopy)
         random.shuffle(result)
         result.extend(resultcopy)
