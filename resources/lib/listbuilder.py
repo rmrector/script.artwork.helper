@@ -32,7 +32,7 @@ def get_listitem_multiimage(path):
     'refresh' is just to get Kodi to fire off the plugin again, just set it to something that will change when the fanart should change
     'containerid' is optional, and points to an alternate container
     'arttype' is optional, and lets you select different artwork
-    'shuffle' is optional and shuffles the list, useful if you aren't using a multiimage control that can randomize it
+    'shuffle' is optional and shuffles the list, maybe useful if you aren't using a multiimage control that can randomize it
     """
 
     if 'containerid' in path['query']:
@@ -68,7 +68,7 @@ def get_listitem_multiimage(path):
 
 def get_pluginpath(doublequerysplit=False):
     """Split path into a handy dict.
-    Parameter 'doublequerysplit' requires '&&' to separate query bits, so skins can pass in paths that contain a querysplit.
+    Parameter 'doublequerysplit' requires '&&' to separate query bits, so skins can pass in paths that contain an ampersand.
 
     Returns dict keys:
     'handle' is plugin handle as int
