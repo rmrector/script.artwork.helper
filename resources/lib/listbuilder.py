@@ -39,6 +39,9 @@ def get_listitem_multiimage(path):
         infolabel = 'Container(%s).ListItem.Art(%s%s)' % (path['query']['containerid'], path['query'].get('arttype', 'fanart'), '%s')
     else:
         infolabel = 'ListItem.Art(%s%s)' % (path['query'].get('arttype', 'fanart'), '%s')
+        # WARN: This is only needed until Krypton
+    if not xbmc.getInfoLabel(infolabel % ''):
+        infolabel = 'Window.Property(%s%s)' % (path['query'].get('arttype', 'fanart'), '%s')
 
     inforesult = xbmc.getInfoLabel(infolabel % '')
     if inforesult:
