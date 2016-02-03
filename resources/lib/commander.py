@@ -49,6 +49,8 @@ class WatchForArtwork:
                     if self.imagestoclear:
                         self.clearproperties_seriesartwork()
                     didneedartwork = False
+                    if monitor.waitForAbort(self.wait):
+                        break
                     continue
                 newseriestitle = xbmc.getInfoLabel(self.seriestitle_info)
                 if newseriestitle != seriestitle or needsartwork != didneedartwork:
