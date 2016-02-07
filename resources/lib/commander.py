@@ -27,7 +27,7 @@ def watchforartwork():
     fullscreenvideo = xbmc.getCondVisibility('Window.IsVisible(fullscreenvideo)')
     thread.start_new_thread(WatchForArtwork(fullscreenvideo).run, ())
 
-class WatchForArtwork:
+class WatchForArtwork(object):
     def __init__(self, fullscreenvideo):
         self.fullscreenvideo = fullscreenvideo
         self.wait = 5 if fullscreenvideo else 0.1
