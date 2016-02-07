@@ -1,6 +1,5 @@
 import json
 import sys
-import thread
 import urllib
 import xbmc
 
@@ -25,7 +24,7 @@ def get_command():
 # NOTE: After my pull request, this won't be needed to grab series artwork
 def watchforartwork():
     fullscreenvideo = xbmc.getCondVisibility('Window.IsVisible(fullscreenvideo)')
-    thread.start_new_thread(WatchForArtwork(fullscreenvideo).run, ())
+    WatchForArtwork(fullscreenvideo).run()
 
 class WatchForArtwork(object):
     def __init__(self, fullscreenvideo):
@@ -73,7 +72,7 @@ class WatchForArtwork(object):
         json_request['params']['filter'] = {'field': 'title', 'operator': 'is', 'value': seriestitle}
         json_request['params']['properties'] = ['art']
         json_result = execute_jsonrpc(json_request)
-        images = {key: None for key in self.imagestoclear}
+        images = dict((key, None) for key in self.imagestoclear)
         del self.imagestoclear[:]
         if 'result' in json_result and json_result['result']['tvshows']:
             result = json_result['result']['tvshows'][0]
@@ -114,13 +113,13 @@ class UTF8JSONDecoder(json.JSONDecoder):
         super(UTF8JSONDecoder, self).__init__(*args, **kwargs)
 
     def raw_decode(self, s, idx=0):
-        result, end = super(UTF8JSONDecoder, self).raw_decode(s, idx)
+        result, end = super(UTF8JSONDecoder, self).raw_decode(s)
         result = self._json_unicode_to_str(result)
         return result, end
 
     def _json_unicode_to_str(self, jsoninput):
         if isinstance(jsoninput, dict):
-            return {self._json_unicode_to_str(key): self._json_unicode_to_str(value) for key, value in jsoninput.iteritems()}
+            return dict((self._json_unicode_to_str(key), self._json_unicode_to_str(value)) for key, value in jsoninput.iteritems())
         elif isinstance(jsoninput, list):
             return [self._json_unicode_to_str(item) for item in jsoninput]
         elif isinstance(jsoninput, unicode):
