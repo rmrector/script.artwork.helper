@@ -74,7 +74,7 @@ class WatchForArtwork(object):
         json_result = execute_jsonrpc(json_request)
         images = dict((key, None) for key in self.imagestoclear)
         del self.imagestoclear[:]
-        if 'result' in json_result and json_result['result']['tvshows']:
+        if 'result' in json_result and 'tvshows' in json_result['result']:
             result = json_result['result']['tvshows'][0]
             for arttype, image in result['art'].iteritems():
                 arttype = 'tvshow.' + arttype
