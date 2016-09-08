@@ -6,9 +6,9 @@
 	</requires>
 	<extension point="xbmc.python.library" library="default.py" />
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork.</summary>
-		<description lang="en">Artwork Helper currently provides a couple of tools to skins and other add-ons for working with artwork. See README.md for detailed usage.</description>
-		<disclaimer lang="en">Artwork Skin Helper does not directly add functionality on its own and must be supported by skins or other add-ons.</disclaimer>
+		<summary lang="en">Artwork Helper provides a couple of tools to skins and other add-ons for working with artwork.</summary>
+		<description lang="en">Artwork Helper provides a couple of tools to skins and other add-ons for working with artwork. See README.md for detailed usage.</description>
+		<disclaimer lang="en">Artwork Helper does not directly add functionality on its own and must be supported by skins or other add-ons.</disclaimer>
 		<source>https://github.com/rmrector/script.artwork.helper</source>
 		<forum>http://forum.kodi.tv/showthread.php?tid=236649</forum>
 		<license>The MIT License</license>
