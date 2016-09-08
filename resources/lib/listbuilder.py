@@ -4,6 +4,8 @@ import urllib
 import xbmc
 import xbmcgui
 import xbmcplugin
+import xbmcvfs
+from xbmcaddon import Addon
 
 def handle_pluginlist():
     path = get_pluginpath(True)
@@ -35,13 +37,12 @@ def get_listitem_multiimage(path):
     'shuffle' is optional and shuffles the list, maybe useful if you aren't using a multiimage control that can randomize it
     """
 
-    if 'containerid' in path['query']:
-        infolabel = 'Container(%s).ListItem.Art(%s%s)' % (path['query']['containerid'], path['query'].get('arttype', 'fanart'), '%s')
-    else:
-        infolabel = 'ListItem.Art(%s%s)' % (path['query'].get('arttype', 'fanart'), '%s')
-        # WARN: This is only needed until Krypton
+    arttype = path['query'].get('arttype', 'fanart')
+    infolabel = 'Container(%s).' % path['query']['containerid'] if 'containerid' in path['query'] else ''
+    infolabel += 'ListItem.Art(%s%s)' % (arttype, '%s')
     if not xbmc.getInfoLabel(infolabel % ''):
-        infolabel = 'Window.Property(%s%s)' % (path['query'].get('arttype', 'fanart'), '%s')
+        # WARN: This is only needed until Krypton
+        infolabel = 'Window.Property(%s%s)' % (arttype, '%s')
 
     inforesult = xbmc.getInfoLabel(infolabel % '')
     if inforesult:
@@ -58,6 +59,15 @@ def get_listitem_multiimage(path):
             if lastempty:
                 break
             lastempty = True
+    if len(result) == 1 and Addon().getSetting('classicmulti') == 'true' and arttype in ('fanart', 'thumb'):
+        infolabel = 'Container({0}).'.format(path['query']['containerid']) if 'containerid' in path['query'] else ''
+        infolabel += 'ListItem.Path'
+        infopath = xbmc.getInfoLabel(infolabel) + 'extrafanart/' if arttype == 'fanart' else 'extrathumbs/'
+        xbmc.log(infopath, xbmc.LOGNOTICE)
+        if xbmcvfs.exists(infopath):
+            _, files = xbmcvfs.listdir(infopath)
+            for filename in files:
+                result.append(infopath + filename)
 
     if 'shuffle' in path['query']:
         resultcopy = list(result)

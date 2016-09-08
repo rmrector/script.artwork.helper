@@ -1,0 +1,9 @@
+# Kodi Media Center language file
+# Addon Name: Artwork Helper
+# Addon id: service.artwork.helper
+msgid ""
+msgstr ""
+
+msgctxt "#32000"
+msgid "Grab extrafanart/extrathumbs if single image in library"
+msgstr ""

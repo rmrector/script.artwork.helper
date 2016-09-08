@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category label="128">
+		<setting id="classicmulti" label="32000" type="bool" default="false" visible="true" />
+	</category>
+</settings>
