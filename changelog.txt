@@ -1,3 +1,6 @@
+v0.6.1
+- Build proper path for extrafanart
+
 v0.6.0 (2016-09-08)
 - Add setting to include extrafanart and extrathumbs
 

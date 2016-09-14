@@ -62,8 +62,8 @@ def get_listitem_multiimage(path):
     if len(result) == 1 and Addon().getSetting('classicmulti') == 'true' and arttype in ('fanart', 'thumb'):
         infolabel = 'Container({0}).'.format(path['query']['containerid']) if 'containerid' in path['query'] else ''
         infolabel += 'ListItem.Path'
-        infopath = xbmc.getInfoLabel(infolabel) + 'extrafanart/' if arttype == 'fanart' else 'extrathumbs/'
-        xbmc.log(infopath, xbmc.LOGNOTICE)
+        infopath = xbmc.getInfoLabel(infolabel) + ('extrafanart' if arttype == 'fanart' else 'extrathumbs')
+        infopath += '\\' if '\\' in infopath else '/'
         if xbmcvfs.exists(infopath):
             _, files = xbmcvfs.listdir(infopath)
             for filename in files:
