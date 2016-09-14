@@ -5,5 +5,9 @@ msgid ""
 msgstr ""
 
 msgctxt "#32000"
+msgid "Not needed if using Artwork Beef"
+msgstr ""
+
+msgctxt "#32001"
 msgid "Grab extrafanart/extrathumbs if single image in library"
 msgstr ""
