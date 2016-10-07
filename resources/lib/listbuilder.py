@@ -15,6 +15,10 @@ def handle_pluginlist():
             uselist = stitch_multiimage(path['query'])
         elif path['path'][1] == 'listitem':
             uselist = get_listitem_multiimage(path['query'])
+        elif path['path'][1] == 'container':
+            uselist = get_container_multiimage(path['query'])
+        elif path['path'][1] == 'smartseries':
+            uselist = get_smartseries_multiimage(path['query'])
     _build_list(uselist, path['handle'])
 
 def _get_pluginpath(doublequerysplit=False):
@@ -104,3 +108,74 @@ def get_listitem_multiimage(query):
         random.shuffle(result)
         result.extend(resultcopy)
     return result
+
+def get_container_multiimage(query):
+    if not query.get('refresh'):
+        return []
+    arttype = query.get('arttype', 'tvshow.fanart')
+    infolabel = 'Container.Art({0}{1})'.format(arttype, '{0}')
+
+    inforesult = xbmc.getInfoLabel(infolabel.format(''))
+    count = 0
+    while not inforesult and count < 10:
+        xbmc.sleep(200)
+        inforesult = xbmc.getInfoLabel(infolabel.format(''))
+        count += 1
+
+    if inforesult:
+        result = [inforesult]
+    else:
+        return []
+    lastempty = False
+    for i in range(1, query.get('limit', 100)):
+        inforesult = xbmc.getInfoLabel(infolabel.format(i))
+        if inforesult:
+            result.append(inforesult)
+            lastempty = False
+        else:
+            if lastempty:
+                break
+            lastempty = True
+
+    if 'shuffle' in query:
+        resultcopy = list(result)
+        random.shuffle(resultcopy)
+        random.shuffle(result)
+        result.extend(resultcopy)
+    return result
+
+def get_smartseries_multiimage(query):
+    if not query.get('title') and not query.get('refresh'):
+        return []
+    elif not query.get('refresh'):
+        query['refresh'] = query['title']
+    content = xbmc.getInfoLabel('Container.Content')
+    if not content:
+        content = xbmc.getInfoLabel('ListItem.DBTYPE')
+    count = 0
+    while not content and count < 10:
+        xbmc.sleep(200)
+        content = xbmc.getInfoLabel('Container.Content')
+        if not content:
+            content = xbmc.getInfoLabel('ListItem.DBTYPE')
+        count += 1
+
+    if content in ('tvshows', 'tvshow'):
+        return get_listitem_multiimage(query)
+    elif content in ('seasons', 'episodes', 'season', 'episode'):
+        if query.get('arttype') and '.' not in query['arttype']:
+            query['arttype'] = 'tvshow.' + query['arttype']
+        else:
+            query['arttype'] = 'tvshow.fanart'
+        if xbmc.getCondVisibility('!IsEmpty(ListItem.Art({0}))'.format(query['arttype'])) \
+                or xbmc.getCondVisibility('IsEmpty(Container.Art({0}))'.format(query['arttype'])):
+            # Prefer ListItem to grab extrafanart
+            return get_listitem_multiimage(query)
+        else:
+            return get_container_multiimage(query)
+    else:
+        if query.get('arttype') and '.' not in query['arttype']:
+            query['arttype'] = 'tvshow.' + query['arttype']
+        else:
+            query['arttype'] = 'tvshow.fanart'
+        return get_listitem_multiimage(query)
