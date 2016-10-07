@@ -69,14 +69,3 @@ When the ListItem option above doesn't work for you, this is your very wordy fri
 image block for as many images as you like, and it will ignore empty ones. The
 double ampersand `&amp;&amp;` separator between images is required.
 
-## Series artwork grabber
-
-This is just a temporary workaround for a bug in Kodi that leaves `ListItem.Art(tvshow.*)` empty
-when the selected season or episode has its own fanart. The real fix is scheduled for Kodi Krypton,
-with PR [#8645](https://github.com/xbmc/xbmc/pull/8645).
-
-To use it, stick `<onload>RunScript(script.artwork.helper, SeriesArtworkGrabber)</onload>` on
-MyVideoNav.xml and VideoFullscreen.xml if you need series artwork on these windows.
-
-When items that are affected (`IsEmpty(ListItem.Art(tvshow.fanart)` or `Player.Art`) are selected
-or played, `Window.Property(tvshow.*)` is set.

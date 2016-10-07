@@ -64,17 +64,11 @@ def get_listitem_multiimage(query):
     infolabel = 'Container({0}).'.format(query['containerid']) if 'containerid' in query else ''
     infolabel += 'ListItem.Art({0}{1})'.format(arttype, '{0}')
     count = 0
-    while count < 10:
-        inforesult = xbmc.getInfoLabel(infolabel.format(''))
-        if not inforesult:
-            # WARN: This is only needed until my PR is merged into Krypton
-            inforesult = xbmc.getInfoLabel('Window.Property({0})'.format(arttype))
-            if inforesult:
-                infolabel = 'Window.Property({0}{1})'.format(arttype, '{0}')
-        if inforesult:
-            break
-        count += 1
+    inforesult = xbmc.getInfoLabel(infolabel.format(''))
+    while not inforesult and count < 10:
         xbmc.sleep(200)
+        inforesult = xbmc.getInfoLabel(infolabel.format(''))
+        count += 1
 
     if inforesult:
         result = [inforesult]
