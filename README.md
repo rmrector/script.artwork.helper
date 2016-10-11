@@ -11,7 +11,9 @@ This is a small add-on that skins can use as a dependency, only doing what a ski
 
 There is an add-on setting to pull extrafanart and extrathumbs from the filesystem, if there is
 only a single image in the library. It is off by default, but can be turned on by the end user/viewer.
-It can be found by navigating to Kodi settings -> Add-ons -> System -> Dependencies -> Artwork Helper.
+It can be found by navigating to Kodi settings -> Add-ons -> System -> Dependencies -> Artwork Helper,
+or for Krypton open Kodi settings -> System settings -> Add-ons -> Manage dependencies -> Artwork Helper.
+The Settings level may need to be set to Advanced to see dependencies in Add-ons.
 
 ## ListItem multi image plugin path
 
@@ -62,10 +64,12 @@ With the full complement of options:
 
 ## Arbitrary images plugin path
 
-This format lets you stitch any images together into a list, by specifying their path.  
+This format lets you stitch any images together into a list by specifying their paths.  
 `plugin://script.artwork.helper/multiimage/?image=<image_path>&amp;&amp;image=<image_path>&amp;&amp;image=<image_path>&amp;&amp;image=<image_path>&amp;&amp;image=<image_path>&amp;&amp;image=<image_path>`
 
 When the ListItem option above doesn't work for you, this is your very wordy friend. Repeat the
 image block for as many images as you like, and it will ignore empty ones. The
 double ampersand `&amp;&amp;` separator between images is required.
 
+This path doesn't read any InfoLabels like the others, just returning the images you gave it into a
+format that `multiimage` or list controls can use.
