@@ -11,6 +11,7 @@ This is a small add-on that skins can use as a dependency, only doing what a ski
 
 There is an add-on setting to pull extrafanart and extrathumbs from the filesystem, if there is
 only a single image in the library. It is off by default, but can be turned on by the end user/viewer.
+This setting is not needed if Artwork Beef is used to manage artwork.
 It can be found by navigating to Kodi settings -> Add-ons -> System -> Dependencies -> Artwork Helper,
 or for Krypton open Kodi settings -> System settings -> Add-ons -> Manage dependencies -> Artwork Helper.
 The Settings level may need to be set to Advanced to see dependencies in Add-ons.
