@@ -145,33 +145,23 @@ def get_smartseries_multiimage(query):
         return []
     elif not query.get('refresh'):
         query['refresh'] = query['title']
-    content = xbmc.getInfoLabel('Container.Content')
-    if not content:
-        content = xbmc.getInfoLabel('ListItem.DBTYPE')
-    count = 0
-    while not content and count < 10:
+
+    if not query.get('arttype'):
+        query['arttype'] = 'fanart'
+    elif '.'  in query['arttype']:
+        query['arttype'] = query['arttype'].rsplit('.', 1)[1]
+
+    count = 0 # Wait for InfoLabel availability
+    while not xbmc.getInfoLabel('ListItem.Label') and count < 10:
         xbmc.sleep(200)
-        content = xbmc.getInfoLabel('Container.Content')
-        if not content:
-            content = xbmc.getInfoLabel('ListItem.DBTYPE')
         count += 1
 
-    if content in ('tvshows', 'tvshow'):
+    arttype = 'tvshow.' + query['arttype']
+    if xbmc.getCondVisibility('!IsEmpty(ListItem.Art({0}))'.format(arttype)):
+        query['arttype'] = arttype
         return get_listitem_multiimage(query)
-    elif content in ('seasons', 'episodes', 'season', 'episode'):
-        if query.get('arttype') and '.' not in query['arttype']:
-            query['arttype'] = 'tvshow.' + query['arttype']
-        else:
-            query['arttype'] = 'tvshow.fanart'
-        if xbmc.getCondVisibility('!IsEmpty(ListItem.Art({0}))'.format(query['arttype'])) \
-                or xbmc.getCondVisibility('IsEmpty(Container.Art({0}))'.format(query['arttype'])):
-            # Prefer ListItem to grab extrafanart
-            return get_listitem_multiimage(query)
-        else:
-            return get_container_multiimage(query)
-    else:
-        if query.get('arttype') and '.' not in query['arttype']:
-            query['arttype'] = 'tvshow.' + query['arttype']
-        else:
-            query['arttype'] = 'tvshow.fanart'
-        return get_listitem_multiimage(query)
+    if xbmc.getCondVisibility('!IsEmpty(Container.Art({0}))'.format(arttype)):
+        query['arttype'] = arttype
+        return get_container_multiimage(query)
+
+    return get_listitem_multiimage(query)
