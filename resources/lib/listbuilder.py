@@ -86,15 +86,17 @@ def get_listitem_multiimage(query):
             lastempty = True
     if len(result) == 1 and Addon().getSetting('classicmulti') == 'true' and arttype in ('fanart', 'thumb', 'tvshow.fanart'):
         infolabel = 'Container({0}).ListItem.'.format(query['containerid']) if 'containerid' in query else 'ListItem.'
-        episodefanart = arttype == 'fanart' and xbmc.getInfoLabel(infolabel + 'DBTYPE') == 'episode' and \
-            xbmc.getCondVisibility('!StringCompare(ListItem.Art(tvshow.fanart), ListItem.Art(fanart))')
-        if not episodefanart:
-            infopath = xbmc.getInfoLabel(infolabel + 'Path') + ('extrafanart' if arttype.endswith('fanart') else 'extrathumbs')
-            infopath += '\\' if '\\' in infopath else '/'
-            if xbmcvfs.exists(infopath):
-                _, files = xbmcvfs.listdir(infopath)
-                for filename in files:
-                    result.append(infopath + filename)
+        infopath = xbmc.getInfoLabel(infolabel + 'Path')
+        if not infopath.startswith('plugin://'):
+            episodefanart = arttype == 'fanart' and xbmc.getInfoLabel(infolabel + 'DBTYPE') == 'episode' and \
+                xbmc.getCondVisibility('!StringCompare(ListItem.Art(tvshow.fanart), ListItem.Art(fanart))')
+            if not episodefanart:
+                infopath += 'extrafanart' if arttype.endswith('fanart') else 'extrathumbs'
+                infopath += '\\' if '\\' in infopath else '/'
+                if xbmcvfs.exists(infopath):
+                    _, files = xbmcvfs.listdir(infopath)
+                    for filename in files:
+                        result.append(infopath + filename)
 
     if 'shuffle' in query:
         resultcopy = list(result)
