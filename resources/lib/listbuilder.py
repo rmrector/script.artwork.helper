@@ -1,4 +1,3 @@
-import random
 import sys
 import urllib
 import xbmc
@@ -98,11 +97,6 @@ def get_listitem_multiimage(query):
                     for filename in files:
                         result.append(infopath + filename)
 
-    if 'shuffle' in query:
-        resultcopy = list(result)
-        random.shuffle(resultcopy)
-        random.shuffle(result)
-        result.extend(resultcopy)
     return result
 
 def get_container_multiimage(query):
@@ -133,11 +127,6 @@ def get_container_multiimage(query):
                 break
             lastempty = True
 
-    if 'shuffle' in query:
-        resultcopy = list(result)
-        random.shuffle(resultcopy)
-        random.shuffle(result)
-        result.extend(resultcopy)
     return result
 
 def get_smartseries_multiimage(query):

@@ -5,7 +5,7 @@ or list control from images available via InfoLabels. This is a helper for a gen
 extrafanart/extrathumbs, see [this forum post] for a rambling explanation on why we might want that.
 This is a small add-on that skins can use as a dependency, only doing what a skin asks it to do.
 
-[this forum post]: http://forum.kodi.tv/showthread.php?tid=236649
+[this forum post]: https://forum.kodi.tv/showthread.php?tid=236649
 
 ## Add-on setting
 
@@ -27,24 +27,22 @@ Additional query params are available to modify its behavior, separate them with
   to something that will change when the fanart should change, like ListItem.DBID
 - `containerid` points to an alternate container
 - `arttype` lets you select different artwork. Defaults to 'fanart'.
-- `shuffle` shuffles the list, maybe useful if you aren't using a multiimage control that can randomize it
 
 With the full complement of options:  
-`plugin://script.artwork.helper/multiimage/listitem/?refresh=$INFO[ListItem.DBID]&amp;&amp;containerid=4250&amp;&amp;arttype=tvshow.fanart&amp;&amp;shuffle=true`
+`plugin://script.artwork.helper/multiimage/listitem/?refresh=$INFO[Container(4250).ListItem.DBID]&amp;&amp;containerid=4250&amp;&amp;arttype=tvshow.fanart`
 
 ## Container multi image plugin path
 
-This grabs multiple images for the current Container.  
+This grabs multiple images for the current skin Container.  
 `plugin://script.artwork.helper/multiimage/container/?refresh=$INFO[Container.FolderName]`
 
 Additional query params are available to modify its behavior, separate them with `&amp;&amp;`.
 - `refresh` is required to get Kodi to fire off the plugin when the focused item changes. Set it
   to something that will change when the fanart should change, like Container.FolderName
 - `arttype` lets you select different artwork. Defaults to 'tvshow.fanart'.
-- `shuffle` shuffles the list, maybe useful if you aren't using a multiimage control that can randomize it
 
 With the full complement of options:  
-`plugin://script.artwork.helper/multiimage/container/?refresh=$INFO[ListItem.DBID]&amp;&amp;arttype=set.fanart&amp;&amp;shuffle=true`
+`plugin://script.artwork.helper/multiimage/container/?refresh=$INFO[ListItem.DBID]&amp;&amp;arttype=set.fanart`
 
 ## Smart series multi image plugin path
 
@@ -58,10 +56,9 @@ Additional query params are available to modify its behavior, separate them with
   and Container.TVShowTitle if seasons/episodes.
 - `arttype` lets you select different artwork. Defaults to 'fanart'. Use only the base
   art type like 'fanart', the plugin will decide if tvshow.* is needed.
-- `shuffle` shuffles the list, maybe useful if you aren't using a multiimage control that can randomize it
 
 With the full complement of options:  
-`plugin://script.artwork.helper/multiimage/smartseries/?title=$INFO[ListItem.Title]&amp;&amp;arttype=fanart&amp;&amp;shuffle=true`
+`plugin://script.artwork.helper/multiimage/smartseries/?title=$INFO[ListItem.Title]&amp;&amp;arttype=fanart`
 
 ## Arbitrary images plugin path
 
