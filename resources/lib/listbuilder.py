@@ -61,13 +61,14 @@ def get_listitem_multiimage(query):
     if not query.get('refresh'):
         return []
     arttype = query.get('arttype', 'fanart')
-    infolabel = 'Container({0}).'.format(query['containerid']) if 'containerid' in query else ''
-    infolabel += 'ListItem.Art({0}{1})'.format(arttype, '{0}')
+    infolabel = 'Container.ListItem.' if not query.get('containerid') \
+        else 'Container({0}).ListItem.'.format(query['containerid'])
+    artlabel = infolabel + 'Art({0}{1})'.format(arttype, '{0}')
     count = 0
-    inforesult = xbmc.getInfoLabel(infolabel.format(''))
+    inforesult = xbmc.getInfoLabel(artlabel.format(''))
     while not inforesult and count < 10:
         xbmc.sleep(200)
-        inforesult = xbmc.getInfoLabel(infolabel.format(''))
+        inforesult = xbmc.getInfoLabel(artlabel.format(''))
         count += 1
 
     if inforesult:
@@ -76,7 +77,7 @@ def get_listitem_multiimage(query):
         return []
     lastempty = False
     for i in range(1, query.get('limit', 100)):
-        inforesult = xbmc.getInfoLabel(infolabel.format(i))
+        inforesult = xbmc.getInfoLabel(artlabel.format(i))
         if inforesult:
             result.append(inforesult)
             lastempty = False
@@ -85,11 +86,10 @@ def get_listitem_multiimage(query):
                 break
             lastempty = True
     if len(result) == 1 and Addon().getSetting('classicmulti') == 'true' and arttype in ('fanart', 'thumb', 'tvshow.fanart'):
-        infolabel = 'Container({0}).ListItem.'.format(query['containerid']) if 'containerid' in query else 'ListItem.'
         infopath = xbmc.getInfoLabel(infolabel + 'Path')
         if not infopath.startswith('plugin://'):
             episodefanart = arttype == 'fanart' and xbmc.getInfoLabel(infolabel + 'DBTYPE') == 'episode' and \
-                xbmc.getCondVisibility('!StringCompare(ListItem.Art(tvshow.fanart), ListItem.Art(fanart))')
+                xbmc.getCondVisibility('!String.IsEqual({0}Art(tvshow.fanart), {0}Art(fanart))'.format(infolabel))
             if not episodefanart:
                 infopath += 'extrafanart' if arttype.endswith('fanart') else 'extrathumbs'
                 infopath += '\\' if '\\' in infopath else '/'
@@ -157,10 +157,10 @@ def get_smartseries_multiimage(query):
         count += 1
 
     arttype = 'tvshow.' + query['arttype']
-    if xbmc.getCondVisibility('!IsEmpty(ListItem.Art({0}))'.format(arttype)):
+    if not xbmc.getCondVisibility('String.IsEmpty(ListItem.Art({0}))'.format(arttype)):
         query['arttype'] = arttype
         return get_listitem_multiimage(query)
-    if xbmc.getCondVisibility('!IsEmpty(Container.Art({0}))'.format(arttype)):
+    if not xbmc.getCondVisibility('String.IsEmpty(Container.Art({0}))'.format(arttype)):
         query['arttype'] = arttype
         return get_container_multiimage(query)
 
