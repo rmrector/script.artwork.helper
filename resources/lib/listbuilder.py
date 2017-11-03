@@ -60,7 +60,7 @@ def get_listitem_multiimage(query):
     if not query.get('refresh'):
         return []
     arttype = query.get('arttype', 'fanart')
-    infolabel = 'Container.ListItem.' if not query.get('containerid') \
+    infolabel = 'ListItem.' if 'containerid' not in query else 'Container.ListItem.' if not query['containerid'] \
         else 'Container({0}).ListItem.'.format(query['containerid'])
     artlabel = infolabel + 'Art({0}{1})'.format(arttype, '{0}')
     count = 0

@@ -25,11 +25,12 @@ Mostly for fanart (fanart#), but works for any art type that has one or more ima
 Additional query params are available to modify its behavior, separate them with `&amp;&amp;`.
 - `refresh` is required to get Kodi to fire off the plugin when the focused item changes. Set it
   to something that will change when the fanart should change, like ListItem.DBID
-- `containerid` points to an alternate container
+- `containerid` points to ListItems in a specific container; either leave blank for the currently selected
+  container on the Leia home window, or set to the desired container's skin ID
 - `arttype` lets you select different artwork. Defaults to 'fanart'.
 
 With the full complement of options:  
-`plugin://script.artwork.helper/multiimage/listitem/?refresh=$INFO[Container(4250).ListItem.DBID]&amp;&amp;containerid=4250&amp;&amp;arttype=tvshow.fanart`
+`plugin://script.artwork.helper/multiimage/listitem/?refresh=$INFO[Container.ListItem.DBID]&amp;&amp;containerid=&amp;&amp;arttype=tvshow.fanart`
 
 ## Container multi image plugin path
 
@@ -47,7 +48,7 @@ With the full complement of options:
 ## Smart series multi image plugin path
 
 This grabs multiple images for the current series, keeping the path the same through
-series-season-episode lists so that the fanart display stays smooth.  
+series-season-episode lists so that the fanart display stays smooth (only on the video library window).  
 `plugin://script.artwork.helper/multiimage/smartseries/?title=$INFO[ListItem.Title]`
 
 Additional query params are available to modify its behavior, separate them with `&amp;&amp;`.
