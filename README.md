@@ -7,6 +7,8 @@ This is a small add-on that skins can use as a dependency, only doing what a ski
 
 [this forum post]: https://forum.kodi.tv/showthread.php?tid=236649
 
+Current version only works for Kodi 17 and 18, see tagged version 0.7.1 for 15 and 16
+
 ## Add-on setting
 
 There is an add-on setting to pull extrafanart and extrathumbs from the filesystem, if there is
@@ -24,9 +26,9 @@ The simplest form grabs multiple images for the currently focused ListItem.
 Mostly for fanart (fanart#), but works for any art type that has one or more images.
 Additional query params are available to modify its behavior, separate them with `&amp;&amp;`.
 - `refresh` is required to get Kodi to fire off the plugin when the focused item changes. Set it
-  to something that will change when the fanart should change, like ListItem.DBID
-- `containerid` points to ListItems in a specific container; either leave blank for the currently selected
-  container on the Leia home window, or set to the desired container's skin ID
+  to something that will change when the fanart should change, like ListItem.DBID or Label
+- `containerid` points to the current ListItem in a specific container; either leave blank for the currently selected
+  container on the **Kodi 18 home window**, or set to the desired container's skin ID
 - `arttype` lets you select different artwork. Defaults to 'fanart'.
 
 With the full complement of options:  
