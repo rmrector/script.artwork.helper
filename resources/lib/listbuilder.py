@@ -12,10 +12,8 @@ def handle_pluginlist():
     if path['path'][0] == 'multiimage':
         if len(path['path']) == 1:
             uselist = stitch_multiimage(path['query'])
-        elif path['path'][1] == 'listitem':
-            uselist = get_listitem_multiimage(path['query'])
-        elif path['path'][1] == 'container':
-            uselist = get_container_multiimage(path['query'])
+        elif path['path'][1] in ('listitem', 'player', 'container'):
+            uselist = get_listitem_multiimage(path['query'], path['path'][1])
         elif path['path'][1] == 'smartseries':
             uselist = get_smartseries_multiimage(path['query'])
     _build_list(uselist, path['handle'])
@@ -51,46 +49,64 @@ def _build_item(item):
 def stitch_multiimage(query):
     if 'image' not in query or not query['image']:
         return []
-    elif isinstance(query['image'], list):
+    if isinstance(query['image'], list):
         return [image for image in query['image'] if image]
-    else:
-        return [query['image']]
+    return [query['image']]
 
-def get_listitem_multiimage(query):
+def get_listitem_multiimage(query, source='listitem'):
     if not query.get('refresh'):
         return []
-    arttype = query.get('arttype', 'fanart')
-    infolabel = 'ListItem.' if 'containerid' not in query else 'Container.ListItem.' if not query['containerid'] \
-        else 'Container({0}).ListItem.'.format(query['containerid'])
-    artlabel = infolabel + 'Art({0}{1})'.format(arttype, '{0}')
+    defarttype = 'artist.fanart' if source == 'player' else \
+        'tvshow.fanart' if source == 'container' else 'fanart'
+    arttypes = [query.get('arttype', defarttype)]
+    if query.get('allartists', ('true' if source == 'player' else 'false')) == 'true' \
+    and arttypes[0].startswith(('artist.', 'albumartist.')):
+        atype = arttypes[0].split('.', 1)[1]
+        mtype = 'albumartist.' if arttypes[0].startswith('artist.') else 'artist.'
+        arttypes.append(mtype + atype)
+        for i in range(1, 5):
+            arttypes.append('artist{0}.{1}'.format(i, atype))
+            arttypes.append('albumartist{0}.{1}'.format(i, atype))
+    infolabel = 'Player.' if source == 'player' else \
+        'Container.' if source == 'container' else \
+        'ListItem.' if 'containerid' not in query else \
+        'Container.ListItem.' if not query['containerid'] else \
+        'Container({0}).ListItem.'.format(query['containerid'])
+    artlabel = infolabel + 'Art({0}{1})'
     count = 0
-    inforesult = xbmc.getInfoLabel(artlabel.format(''))
-    while not inforesult and count < 10:
+    def checktypes():
+        for arttype in arttypes:
+            result = xbmc.getInfoLabel(artlabel.format(arttype, ''))
+            if result: return True
+    foundit = checktypes()
+    while not foundit and count < 10:
         xbmc.sleep(200)
-        inforesult = xbmc.getInfoLabel(artlabel.format(''))
+        foundit = checktypes()
         count += 1
 
-    if inforesult:
-        result = [inforesult]
-    else:
+    if not foundit:
         return []
-    lastempty = False
-    for i in range(1, query.get('limit', 100)):
-        inforesult = xbmc.getInfoLabel(artlabel.format(i))
-        if inforesult:
-            result.append(inforesult)
-            lastempty = False
-        else:
-            if lastempty:
-                break
-            lastempty = True
-    if len(result) == 1 and Addon().getSetting('classicmulti') == 'true' and arttype in ('fanart', 'thumb', 'tvshow.fanart'):
-        infopath = xbmc.getInfoLabel(infolabel + 'Path')
+    result = []
+    for arttype in arttypes:
+        lastempty = False
+        for i in range(0, query.get('limit', 100)):
+            inforesult = xbmc.getInfoLabel(artlabel.format(arttype, i if i else ''))
+            if inforesult:
+                result.append(inforesult)
+                lastempty = False
+            else:
+                if lastempty:
+                    break
+                lastempty = True
+    if _find_extrafanart(source, arttypes, result):
+        infopath = xbmc.getInfoLabel(infolabel + ('Path' if source == 'listitem' else 'Folderpath'))
         if not infopath.startswith('plugin://'):
-            episodefanart = arttype == 'fanart' and xbmc.getInfoLabel(infolabel + 'DBTYPE') == 'episode' and \
+            isepisode = xbmc.getCondVisibility('VideoPlayer.Content(episodes)') if source == 'player' \
+                else xbmc.getInfoLabel(infolabel + 'DBTYPE') == 'episode'
+            episodefanart = arttypes[0] == 'fanart' and isepisode and \
                 xbmc.getCondVisibility('!String.IsEqual({0}Art(tvshow.fanart), {0}Art(fanart))'.format(infolabel))
             if not episodefanart:
-                infopath += 'extrafanart' if arttype.endswith('fanart') else 'extrathumbs'
+                infopath += 'extrafanart' if arttypes[0].endswith('fanart') else 'extrathumbs'
                 infopath += '\\' if '\\' in infopath else '/'
                 if xbmcvfs.exists(infopath):
                     _, files = xbmcvfs.listdir(infopath)
@@ -99,35 +115,9 @@ def get_listitem_multiimage(query):
 
     return result
 
-def get_container_multiimage(query):
-    if not query.get('refresh'):
-        return []
-    arttype = query.get('arttype', 'tvshow.fanart')
-    infolabel = 'Container.Art({0}{1})'.format(arttype, '{0}')
-
-    inforesult = xbmc.getInfoLabel(infolabel.format(''))
-    count = 0
-    while not inforesult and count < 10:
-        xbmc.sleep(200)
-        inforesult = xbmc.getInfoLabel(infolabel.format(''))
-        count += 1
-
-    if inforesult:
-        result = [inforesult]
-    else:
-        return []
-    lastempty = False
-    for i in range(1, query.get('limit', 100)):
-        inforesult = xbmc.getInfoLabel(infolabel.format(i))
-        if inforesult:
-            result.append(inforesult)
-            lastempty = False
-        else:
-            if lastempty:
-                break
-            lastempty = True
-
-    return result
+def _find_extrafanart(source, arttypes, result):
+    return source != 'container' and len(result) == 1 and Addon().getSetting('classicmulti') == 'true' \
+        and len(arttypes) == 1 and arttypes[0] in ('fanart', 'thumb', 'tvshow.fanart')
 
 def get_smartseries_multiimage(query):
     if not query.get('title') and not query.get('refresh'):
@@ -151,6 +141,6 @@ def get_smartseries_multiimage(query):
         return get_listitem_multiimage(query)
     if not xbmc.getCondVisibility('String.IsEmpty(Container.Art({0}))'.format(arttype)):
         query['arttype'] = arttype
-        return get_container_multiimage(query)
+        return get_listitem_multiimage(query, 'container')
 
     return get_listitem_multiimage(query)
