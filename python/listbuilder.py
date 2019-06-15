@@ -1,5 +1,8 @@
 import sys
-import urllib
+try:
+    from urllib import unquote
+except ImportError:
+    from urllib.parse import unquote
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -43,7 +46,7 @@ def _build_list(items, handle):
 
 def _build_item(item):
     if item.startswith('image://'):
-        item = urllib.unquote(item[8:-1])
+        item = unquote(item[8:-1])
     result = xbmcgui.ListItem(item)
     result.setMimeType(_get_mimetype(item))
     return (item, result)
