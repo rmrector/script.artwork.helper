@@ -44,7 +44,16 @@ def _build_list(items, handle):
 def _build_item(item):
     if item.startswith('image://'):
         item = urllib.unquote(item[8:-1])
-    return (item, xbmcgui.ListItem(item))
+    result = xbmcgui.ListItem(item)
+    result.setMimeType(_get_mimetype(item))
+    return (item, result)
+
+mimemap = {'jpg': 'image/jpeg', 'png': 'image/png', 'gif': 'image/gif'}
+def _get_mimetype(url):
+    for ext in mimemap:
+        if url.endswith(ext):
+            return mimemap[ext]
+    return 'image/jpeg'
 
 def stitch_multiimage(query):
     if 'image' not in query or not query['image']:

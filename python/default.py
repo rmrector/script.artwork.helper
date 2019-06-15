@@ -1,10 +1,5 @@
-import os
 import sys
 import xbmc
-from xbmcaddon import Addon
-
-addonpath = xbmc.translatePath(Addon().getAddonInfo('path')).decode('utf-8')
-sys.path.append(os.path.join(addonpath, u'resources', u'lib'))
 
 import listbuilder
 

@@ -5,7 +5,7 @@
 		<import addon="xbmc.json" version="6.20.0" />
 		<import addon="xbmc.addon" version="17.0.0" />
 	</requires>
-	<extension point="xbmc.python.library" library="default.py" />
+	<extension point="xbmc.python.library" library="python/default.py" />
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Artwork Helper provides a couple of tools to skins and other add-ons for working with artwork.</summary>
 		<description lang="en">Artwork Helper provides a couple of tools to skins and other add-ons for working with artwork. See README.md for detailed usage.</description>
